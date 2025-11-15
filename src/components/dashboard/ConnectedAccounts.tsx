@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Plus, Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
 import { TikTokIcon } from "@/components/icons/TikTokIcon";
 import { toast } from "sonner";
+import ConnectAccountDialog from "./ConnectAccountDialog";
 
 interface SocialAccount {
   id: string;
@@ -18,6 +19,7 @@ interface SocialAccount {
 const ConnectedAccounts = () => {
   const [accounts, setAccounts] = useState<SocialAccount[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showConnectDialog, setShowConnectDialog] = useState(false);
 
   useEffect(() => {
     fetchAccounts();
@@ -81,7 +83,7 @@ const ConnectedAccounts = () => {
             <CardTitle>Connected Accounts</CardTitle>
             <CardDescription>Manage your social media connections</CardDescription>
           </div>
-          <Button size="sm" className="gap-2">
+          <Button size="sm" className="gap-2" onClick={() => setShowConnectDialog(true)}>
             <Plus className="h-4 w-4" />
             Connect Account
           </Button>
@@ -97,7 +99,7 @@ const ConnectedAccounts = () => {
         ) : accounts.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground mb-4">No accounts connected yet</p>
-            <Button className="gap-2">
+            <Button className="gap-2" onClick={() => setShowConnectDialog(true)}>
               <Plus className="h-4 w-4" />
               Connect Your First Account
             </Button>
@@ -130,6 +132,11 @@ const ConnectedAccounts = () => {
           </div>
         )}
       </CardContent>
+      
+      <ConnectAccountDialog 
+        open={showConnectDialog} 
+        onOpenChange={setShowConnectDialog} 
+      />
     </Card>
   );
 };
